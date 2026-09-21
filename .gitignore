@@ -1,0 +1,7 @@
+# Keep local secrets out of version control.
+.env
+.env.*
+!.env.example
+
+__pycache__/
+*.pyc
