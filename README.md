@@ -20,14 +20,18 @@ This tiny demo is intentionally simple and safe. It shows how a fake secret can 
 
 ## Run it locally
 
+> **Note:** On Windows, use `python` instead of `python3` (Windows ships Python under the `python` command, not `python3`). On macOS/Linux, use `python3`.
+
 1. Start the mock API:
    ```bash
-   python3 server.py
+   python3 server.py       # macOS/Linux
+   python server.py        # Windows
    ```
 
 2. In a second terminal, run the app:
    ```bash
-   python3 vulnerable_app.py
+   python3 vulnerable_app.py   # macOS/Linux
+   python vulnerable_app.py    # Windows
    ```
 
    Expected result: the app successfully gets customer data because the fake token is still valid.
@@ -44,12 +48,20 @@ This tiny demo is intentionally simple and safe. It shows how a fake secret can 
    curl -X POST http://127.0.0.1:9000/revoke -H "Content-Type: application/json" -d '{"token":"demo_live_key_do_not_use"}'
    ```
 
+   On Windows PowerShell, `curl.exe` mangles the quoted JSON body and crashes the server. Use this instead:
+   ```powershell
+   Invoke-RestMethod -Uri http://127.0.0.1:9000/revoke -Method Post -ContentType "application/json" -Body '{"token":"demo_live_key_do_not_use"}'
+   ```
+
 5. Run the app again:
    ```bash
-   python3 vulnerable_app.py
+   python3 vulnerable_app.py   # macOS/Linux
+   python vulnerable_app.py    # Windows
    ```
 
    Expected result: `401 unauthorized` because the credential has been revoked.
+
+> **To repeat the demo:** the mock API keeps revoked tokens revoked in memory only. Stop and restart `server.py` to reset it before running through the steps again.
 
 ## Important
 
